@@ -1,7 +1,7 @@
 package com.phuongheh.services;
 
 import com.phuongheh.commands.UnitOfMeasureCommand;
-import com.phuongheh.commands.UnitOfMeasureToUnitOfMeasureCommand;
+import com.phuongheh.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import com.phuongheh.repositories.UnitOfMeasureRepository;
 import org.springframework.stereotype.Service;
 
