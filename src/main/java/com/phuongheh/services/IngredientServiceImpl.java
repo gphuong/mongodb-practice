@@ -11,7 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -44,6 +46,8 @@ public class IngredientServiceImpl implements IngredientService {
         if (!ingredientCommandOptional.isPresent()) {
             log.error("Ingredient id not found: " + ingredientId);
         }
+        IngredientCommand ingredient = ingredientCommandOptional.get();
+        ingredient.setRecipeId(recipeId);
         return ingredientCommandOptional.get();
     }
 
@@ -54,6 +58,7 @@ public class IngredientServiceImpl implements IngredientService {
         if (!recipeOptional.isPresent()) {
             return new IngredientCommand();
         } else {
+            command.setId(UUID.randomUUID().toString());
             Recipe recipe = recipeOptional.get();
             Optional<Ingredient> ingredientOptional = recipe.getIngredients()
                     .stream()
@@ -67,6 +72,7 @@ public class IngredientServiceImpl implements IngredientService {
                         .findById(command.getUom().getId()).orElseThrow(() -> new RuntimeException("UOM NOT FOUND")));
             } else {
                 Ingredient ingredient = ingredientCommandToIngredient.convert(command);
+                ingredient.setAmount(new BigDecimal("100"));
                 recipe.addIngredient(ingredient);
             }
             Recipe savedRecipe = recipeRepository.save(recipe);
